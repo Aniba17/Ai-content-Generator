@@ -5,4 +5,4 @@ huggingface_hub
 pydantic 
 langchain 
 crewai
-
+groq
