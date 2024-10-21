@@ -1,11 +1,8 @@
+# main.py
 import streamlit as st
 from crewai import Crew
-from textwrap import dedent
 from agents import ContentCreators
 from tasks import ContentTasks
-
-from dotenv import load_dotenv
-load_dotenv()
 
 class ContentCrew:
     def __init__(self, topic, requirements, interests, task_type):
