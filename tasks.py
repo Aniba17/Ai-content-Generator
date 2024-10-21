@@ -1,9 +1,7 @@
 # tasks.py
 from crewai import Task
 from textwrap import dedent
-from typing import Type
-from .tools import ContentResearchTool  # Ensure this points to the correct path of your tools file
-from langchain.tools import BaseTool
+from tools import ContentResearchTool  # Use absolute import
 
 class ContentTasks:
     def ContentResearchTool(self):
