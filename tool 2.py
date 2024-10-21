@@ -16,21 +16,20 @@ os.environ["GROQ_API_KEY"] = "gsk_ypZhv5q6DAiSLSaUcNKNWGdyb3FY9wQE7HNOXgaGXsVlxc
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 # Load the model name
-model_name = "meta-llama/Llama-2-7b-chat-hf"  # Ensure this model exists on Hugging Face
+model_name = "meta-llama/Llama-2-8b-hf"  # Ensure this model exists on Hugging Face
 
 # Load the tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-# Load the model with half precision and move to GPU
-device = "cuda" if torch.cuda.is_available() else "cpu"
-precision = torch.float16 if device == "cuda" else torch.float32
-model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=precision).to(device)
+# Load the model on CPU (no quantization)
+device = "cpu"  # Specify CPU usage
+model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float32).to(device)  # Use full precision
 
-# Create a text generation pipeline with GPU support
-pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, device=0)  # Set device to GPU (0)
+# Create a text generation pipeline on CPU
+pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, device=-1)  # Set device to CPU (-1)
 
 def summarize_text(text):
-    """Generates a summary of the provided text using the Llama model."""
+    """Generates a summary of the provided text using the LLaMA model."""
     with torch.no_grad():  # Reduce memory usage during inference
         summary = pipe(text, max_length=150, num_return_sequences=1)[0]['generated_text']
     return summary
