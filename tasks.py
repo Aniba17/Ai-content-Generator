@@ -1,13 +1,12 @@
-# tasks.py
 from crewai import Task
 from textwrap import dedent
-from tools import ContentResearchTool  # Use absolute import
+from tools import ContentResearchTool  # Ensure correct import of your tool
 
 class ContentTasks:
-    def ContentResearchTool(self):
+    def content_research_tool(self):
         return ContentResearchTool()  # Instantiate the ContentResearchTool
 
-    def TextSummarizationTool(self):
+    def text_summarization_tool(self):
         return Task(
             description=dedent("""
                 **Task**: Text Summarization
