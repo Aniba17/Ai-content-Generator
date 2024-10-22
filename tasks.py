@@ -13,6 +13,10 @@ class ContentTasks:
                 "topic": {"type": "string", "description": "The topic for which content is to be researched."},
                 "requirements": {"type": "string", "description": "Specific requirements or constraints for the research."},
                 "interest_areas": {"type": "string", "description": "Areas of interest related to the topic."}
+            },
+            expected_output={
+                "summary": {"type": "string", "description": "A summary of the researched content."},
+                "sources": {"type": "list", "description": "A list of sources used for the research."}
             }
         )
 
@@ -28,5 +32,8 @@ class ContentTasks:
                 "text": {"type": "string", "description": "The text that needs to be summarized."},
                 "length": {"type": "string", "description": "Desired length of the summary (short, medium, long)."},
                 "format": {"type": "string", "description": "Desired format for the summary (bullet points, paragraphs, etc.)."}
+            },
+            expected_output={
+                "summary": {"type": "string", "description": "The summarized text."}
             }
         )
