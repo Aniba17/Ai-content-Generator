@@ -1,9 +1,9 @@
 streamlit 
-torch 
-transformers 
-huggingface_hub 
 pydantic 
 langchain 
+transformers
+huggingface-hub
 crewai
+crewai-tools
 groq
-autogen
+chromadb
