@@ -1,4 +1,3 @@
-# main.py
 import streamlit as st
 from crewai import Crew
 from agents import ContentCreators
@@ -22,12 +21,11 @@ class ContentCrew:
         editing_optimization_agent = agents.editing_and_optimization_agent()
 
         # Add more robust error handling for task-agent matching
+        task_list = []
         if self.task_type == "Generate Content":
-            task_list = [tasks.ContentResearchTool()]  # Add tasks relevant to content generation
+            task_list = [tasks.content_research_tool()]  # Use the method to get the task
         elif self.task_type == "Summarize Text":
-            task_list = [tasks.TextSummarizationTool()]  # Add tasks for summarization
-        else:
-            task_list = []
+            task_list = [tasks.text_summarization_tool()]  # Use the method to get the task
 
         # Create a crew with agents and tasks
         crew = Crew(
