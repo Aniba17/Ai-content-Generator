@@ -19,14 +19,19 @@ class ContentCreators:
         return chat_completion.choices[0].message.content
 
     def content_research_agent(self):
-        return Agent(
-            role="Content Research Agent",
-            backstory=dedent("""An expert in researching various subjects and summarizing key points."""),
-            goal=dedent("""To gather relevant and high-quality information from reliable sources on the given topic, summarizing key points and facts for the content creation process."""),
-            tools=[ContentTasks().content_research_tool()],
-            verbose=True,
-            llm=self.generate_content,
-        )
+    research_tool = ContentTasks().content_research_tool()
+    if not isinstance(research_tool, dict):  # Assuming it should be a dict
+        raise ValueError("Expected a dictionary for the content research tool.")
+    
+    return Agent(
+        role="Content Research Agent",
+        backstory=dedent("An expert in researching various subjects and summarizing key points."),
+        goal=dedent("To gather relevant and high-quality information from reliable sources on the given topic, summarizing key points and facts for the content creation process."),
+        tools=[research_tool],
+        verbose=True,
+        llm=self.generate_content,
+    )
+
 
     def content_generation_agent(self):
         return Agent(
