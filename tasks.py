@@ -1,36 +1,32 @@
 from crewai import Task
-from textwrap import dedent
-from Content_Research_tool import ContentResearchTool  # Ensure correct import of your tool
 
 class ContentTasks:
     def content_research_tool(self):
-        return ContentResearchTool()  # Instantiate the ContentResearchTool
+        """
+        Creates a task for content research.
+        This task will gather high-quality information from reliable sources.
+        """
+        return Task(
+            name="Content Research",
+            description="Gathers high-quality information from reliable sources.",
+            parameters={
+                "topic": {"type": "string", "description": "The topic for which content is to be researched."},
+                "requirements": {"type": "string", "description": "Specific requirements or constraints for the research."},
+                "interest_areas": {"type": "string", "description": "Areas of interest related to the topic."}
+            }
+        )
 
     def text_summarization_tool(self):
+        """
+        Creates a task for summarizing text.
+        This task will summarize provided content based on the given parameters.
+        """
         return Task(
-            description=dedent("""
-                **Task**: Text Summarization
-                **Description**: Summarize the provided text into a concise and engaging format.
-            """),
-            agent="Content Generation Agent"
-        )
-
-    def generate_content(self, agent, topic, length, tone):
-        return Task(
-            description=dedent(f"""
-                **Task**: Generate Content
-                **Description**: Create content on the topic "{topic}". The content should be engaging and tailored to the audience's preferences.
-                **Length**: {length}
-                **Tone**: {tone}
-            """),
-            agent=agent
-        )
-
-    def summarize_content(self, agent, content, summary_length):
-        return Task(
-            description=dedent(f"""
-                **Task**: Summarize Content
-                **Description**: Summarize the provided content in approximately {summary_length} words.
-            """),
-            agent=agent
+            name="Text Summarization",
+            description="Summarizes the provided text.",
+            parameters={
+                "text": {"type": "string", "description": "The text that needs to be summarized."},
+                "length": {"type": "string", "description": "Desired length of the summary (short, medium, long)."},
+                "format": {"type": "string", "description": "Desired format for the summary (bullet points, paragraphs, etc.)."}
+            }
         )
