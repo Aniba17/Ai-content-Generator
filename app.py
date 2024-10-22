@@ -20,12 +20,20 @@ class ContentCrew:
         content_generation_agent = agents.content_generation_agent()
         editing_optimization_agent = agents.editing_and_optimization_agent()
 
-        # Add more robust error handling for task-agent matching
+        # Define task list based on the task type
         task_list = []
         if self.task_type == "Generate Content":
-            task_list = [tasks.content_research_tool()]  # Use the method to get the task
+            task_list = [tasks.content_research_tool()]  # Correct method call
+            # Check if the content research agent is present in the task
+            if content_research_agent is None:
+                st.error("Content Research Agent is not available.")
+                return
         elif self.task_type == "Summarize Text":
-            task_list = [tasks.text_summarization_tool()]  # Use the method to get the task
+            task_list = [tasks.text_summarization_tool()]  # Correct method call
+            # Ensure the appropriate agent for text summarization is available
+            if content_generation_agent is None:
+                st.error("Content Generation Agent is not available.")
+                return
 
         # Create a crew with agents and tasks
         crew = Crew(
