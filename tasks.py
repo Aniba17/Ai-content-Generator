@@ -3,10 +3,6 @@ from crewai import Task
 
 class ContentTasks:
     def content_research_tool(self):
-        """
-        Creates a task for content research.
-        This task will gather high-quality information from reliable sources.
-        """
         return Task(
             name="Content Research",
             description="Gathers high-quality information from reliable sources.",
@@ -19,10 +15,6 @@ class ContentTasks:
         )
 
     def text_summarization_tool(self):
-        """
-        Creates a task for summarizing text.
-        This task will summarize provided content based on the given parameters.
-        """
         return Task(
             name="Text Summarization",
             description="Summarizes the provided text.",
