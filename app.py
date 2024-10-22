@@ -11,31 +11,21 @@ class ContentCrew:
         self.task_type = task_type
 
     def run(self):
-        # Initialize agents and tasks
-        agents = ContentCreators()
+        # Initialize tasks and agents
         tasks = ContentTasks()
+        agents = ContentCreators()
 
         # Initialize agents based on the selected task
-        content_research_agent = agents.content_research_agent()
-        content_generation_agent = agents.content_generation_agent()
-        editing_optimization_agent = agents.editing_and_optimization_agent()
+        content_research_agent = agents.content_research_agent(tasks)
+        content_generation_agent = agents.content_generation_agent(tasks)
+        editing_optimization_agent = agents.editing_and_optimization_agent(tasks)
 
         # Create task list based on the task type
         task_list = []
         if self.task_type == "Generate Content":
-            task = tasks.content_research_tool()  # Call the correct method
-            task_list = [task]  # Ensure task is a list
-            # Check if the content research agent is defined and matches the task
-            if content_research_agent is None:
-                st.error("Content Research Agent is not available.")
-                return
+            task_list = [tasks.content_research_tool()]  # Call the correct method
         elif self.task_type == "Summarize Text":
-            task = tasks.text_summarization_tool()  # Call the correct method
-            task_list = [task]  # Ensure task is a list
-            # Check if the content generation agent is defined and matches the task
-            if content_generation_agent is None:
-                st.error("Content Generation Agent is not available.")
-                return
+            task_list = [tasks.text_summarization_tool()]  # Call the correct method
 
         # Create a crew with agents and tasks
         crew = Crew(
