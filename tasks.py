@@ -1,6 +1,6 @@
 from crewai import Task
 from textwrap import dedent
-from tools import ContentResearchTool  # Ensure correct import of your tool
+from Content_Research_tool import ContentResearchTool  # Ensure correct import of your tool
 
 class ContentTasks:
     def content_research_tool(self):
