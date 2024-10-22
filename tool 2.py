@@ -48,7 +48,8 @@ def main():
     st.write("Enter the text you want to summarize and get insights for:")
 
     # Input text area for user input
-    original_text = st.text_area("Input Text", height=min(len(original_text)//2 + 50, 500))
+    original_text = st.text_area("Input Text", height=300)  # Define the height as needed
+
 
     if st.button("Generate Summary and Insights"):
         if original_text:
