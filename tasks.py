@@ -14,10 +14,7 @@ class ContentTasks:
                 "requirements": {"type": "string", "description": "Specific requirements or constraints for the research."},
                 "interest_areas": {"type": "string", "description": "Areas of interest related to the topic."}
             },
-            expected_output={
-                "summary": {"type": "string", "description": "A summary of the researched content."},
-                "sources": {"type": "list", "description": "A list of sources used for the research."}
-            }
+            expected_output="A summary of the researched content and a list of sources used for the research."
         )
 
     def text_summarization_tool(self):
@@ -33,7 +30,5 @@ class ContentTasks:
                 "length": {"type": "string", "description": "Desired length of the summary (short, medium, long)."},
                 "format": {"type": "string", "description": "Desired format for the summary (bullet points, paragraphs, etc.)."}
             },
-            expected_output={
-                "summary": {"type": "string", "description": "The summarized text."}
-            }
+            expected_output="The summarized text."
         )
