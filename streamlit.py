@@ -1,5 +1,6 @@
 import streamlit as st
 from main import ContentCrew  # Import the ContentCrew class
+from tasks import ContentTasks  # Import the ContentTasks class
 from summarization_tool import summarize_text, get_insight_from_groq  # Import summarization functions
 
 # Set the title of the Streamlit app
@@ -22,8 +23,9 @@ if task_option == "Generate Content":
 
     if st.sidebar.button("Generate"):
         try:
-            content_crew = ContentCrew(topic, requirements, interests)
-            result = content_crew.run()  # Run the crew to generate content
+            # Initialize the ContentCrew with the user inputs
+            content_crew = ContentCrew()
+            result = content_crew.run(topic=topic, requirements=requirements, interests=interests)  # Pass the inputs directly
             st.success("Generated Content:")
             st.write(result)  # Display the generated content
         except Exception as e:
