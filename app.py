@@ -23,13 +23,15 @@ class ContentCrew:
         # Create task list based on the task type
         task_list = []
         if self.task_type == "Generate Content":
-            task_list = [tasks.content_research_tool()]  # Call the correct method
+            task = tasks.content_research_tool()  # Call the correct method
+            task_list = [task]  # Ensure task is a list
             # Check if the content research agent is defined and matches the task
             if content_research_agent is None:
                 st.error("Content Research Agent is not available.")
                 return
         elif self.task_type == "Summarize Text":
-            task_list = [tasks.text_summarization_tool()]  # Call the correct method
+            task = tasks.text_summarization_tool()  # Call the correct method
+            task_list = [task]  # Ensure task is a list
             # Check if the content generation agent is defined and matches the task
             if content_generation_agent is None:
                 st.error("Content Generation Agent is not available.")
