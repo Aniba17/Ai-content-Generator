@@ -1,5 +1,4 @@
 import os
-import torch
 import streamlit as st
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 from groq import Groq
@@ -16,29 +15,28 @@ os.environ["GROQ_API_KEY"] = "gsk_ypZhv5q6DAiSLSaUcNKNWGdyb3FY9wQE7HNOXgaGXsVlxc
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 # Load the model name
-model_name = "meta-llama/Llama-2-8b-hf"  # Ensure this model exists on Hugging Face
+model_name = "llama3-8b-8129"  # Ensure this model exists on Hugging Face
 
 # Load the tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-# Load the model on CPU (no quantization)
-device = "cpu"  # Specify CPU usage
-model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float32).to(device)  # Use full precision
+# Load the model on CPU without quantization
+model = AutoModelForCausalLM.from_pretrained(model_name)  # No quantization and using full precision
 
 # Create a text generation pipeline on CPU
-pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, device=-1)  # Set device to CPU (-1)
+pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
 
-def summarize_text(text):
+def summarize_text(text: str) -> str:
     """Generates a summary of the provided text using the LLaMA model."""
-    with torch.no_grad():  # Reduce memory usage during inference
-        summary = pipe(text, max_length=150, num_return_sequences=1)[0]['generated_text']
+    # Generate summary
+    summary = pipe(text, max_length=150, num_return_sequences=1)[0]['generated_text']
     return summary
 
-def get_insight_from_groq(content):
+def get_insight_from_groq(content: str) -> str:
     """Fetches insights from Groq API based on the provided content."""
     chat_completion = client.chat.completions.create(
         messages=[{"role": "user", "content": content}],
-        model="llama3-8b-8192",  # Update to your desired Groq model
+        model="llama3-8b-8192"  # Using the specified Groq model
     )
     return chat_completion.choices[0].message.content
 
@@ -49,7 +47,6 @@ def main():
 
     # Input text area for user input
     original_text = st.text_area("Input Text", height=300)  # Define the height as needed
-
 
     if st.button("Generate Summary and Insights"):
         if original_text:
