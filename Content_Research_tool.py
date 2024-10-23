@@ -2,6 +2,8 @@ from typing import Any, Type
 from pydantic import BaseModel, Field
 from langchain.tools import BaseTool
 from groq import Groq
+from chromadb import Documents, EmbeddingFunction, Embeddings
+
 
 # Define the input schema for the tool
 class ContentResearchToolInput(BaseModel):
