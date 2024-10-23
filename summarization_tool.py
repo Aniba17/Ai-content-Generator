@@ -3,7 +3,7 @@ import streamlit as st
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 from groq import Groq
 from huggingface_hub import login
-from chromadb import Documents, EmbeddingFunction, Embeddings
+
 
 
 # Log in using your Hugging Face token
