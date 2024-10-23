@@ -4,7 +4,6 @@ from agents import ContentCreators
 from tasks import ContentTasks
 
 
-
 class ContentCrew:
     def __init__(self, topic, requirements, interests, task_type):
         self.topic = topic
@@ -45,6 +44,7 @@ class ContentCrew:
             result = f"Error during task execution: {str(e)}"
 
         return result
+
 
 def main():
     # Streamlit UI setup
@@ -87,6 +87,7 @@ def main():
                 st.write(result)
             else:
                 st.warning("Please enter the text to summarize.")
+
 
 if __name__ == "__main__":
     main()
