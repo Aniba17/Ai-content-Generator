@@ -2,7 +2,7 @@ import streamlit as st
 from main import ContentCrew  # Import the ContentCrew class
 from tasks import ContentTasks  # Import the ContentTasks class
 from summarization_tool import summarize_text, get_insight_from_groq  # Import summarization functions
-from chromadb import Documents, EmbeddingFunction, Embeddings
+
 
 
 # Set the title of the Streamlit app
