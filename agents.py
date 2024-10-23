@@ -3,7 +3,6 @@ from groq import Groq
 from crewai import Agent
 
 
-
 class ContentCreators:
     def __init__(self, api_key='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', model_name="llama3-8b-8192"):
         self.api_key = api_key  # Securely manage your API key
