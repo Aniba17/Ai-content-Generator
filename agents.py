@@ -1,7 +1,7 @@
 from textwrap import dedent
 from groq import Groq
 from crewai import Agent
-from chromadb import Documents, EmbeddingFunction, Embeddings
+
 
 
 class ContentCreators:
