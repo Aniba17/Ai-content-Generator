@@ -1,6 +1,8 @@
 from textwrap import dedent
 from groq import Groq
 from crewai import Agent
+from chromadb import Documents, EmbeddingFunction, Embeddings
+
 
 class ContentCreators:
     def __init__(self, api_key='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', model_name="llama3-8b-8192"):
