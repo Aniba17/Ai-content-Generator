@@ -1,6 +1,6 @@
 # tasks.py
 from crewai import Task
-from chromadb import Documents, EmbeddingFunction, Embeddings
+
 
 
 class ContentTasks:
