@@ -4,10 +4,10 @@ from langchain.tools import BaseTool
 from groq import Groq
 
 
-
 # Define the input schema for the tool
 class ContentResearchToolInput(BaseModel):
     query: str = Field(..., description="The topic or query you want to research.")
+
 
 # Define the ContentResearchTool class
 class ContentResearchTool(BaseTool):
@@ -48,10 +48,12 @@ class ContentResearchTool(BaseTool):
         """
         Asynchronous run for the tool. Can be used in async environments.
         """
+        research_result = await self._run(query)  # Ensure to await the run method
         return {
-    "query": query,
-    "result": research_result
-}
+            "query": query,
+            "result": research_result
+        }
+
 
 # Example of how to use the tool
 if __name__ == "__main__":
