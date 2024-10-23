@@ -8,4 +8,4 @@ crewai-tools
 groq
 chromadb
 
-poety
+poetry
