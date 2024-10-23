@@ -2,6 +2,8 @@ import streamlit as st
 from crewai import Crew
 from agents import ContentCreators
 from tasks import ContentTasks
+from chromadb import Documents, EmbeddingFunction, Embeddings
+
 
 class ContentCrew:
     def __init__(self, topic, requirements, interests, task_type):
