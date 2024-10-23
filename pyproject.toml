@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "3.12.6"
 streamlit = "1.39.0"  # Specify your Streamlit version
-chromadb ="0.5.15"
+
 
 
 [build-system]
