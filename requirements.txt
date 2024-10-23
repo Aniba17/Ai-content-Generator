@@ -6,6 +6,6 @@ huggingface-hub
 crewai
 crewai-tools
 groq
-chromadb
+
 
 poetry
