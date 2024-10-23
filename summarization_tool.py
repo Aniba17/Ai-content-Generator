@@ -4,14 +4,19 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 from groq import Groq
 from huggingface_hub import login
 
-
-
 # Log in using your Hugging Face token
-hf_token = "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"  # Replace with your actual Hugging Face token
-login(token=hf_token)
+hf_token = os.getenv("HUGGINGFACE_TOKEN")  # Replace with your actual Hugging Face token
+if hf_token:
+    login(token=hf_token)
+else:
+    st.error("Hugging Face token not found. Please set the environment variable HUGGINGFACE_TOKEN.")
 
 # Set your Groq API key
-os.environ["GROQ_API_KEY"] = "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"  # Replace with your actual API key
+groq_api_key = os.getenv("GROQ_API_KEY")  # Replace with your actual API key
+if groq_api_key:
+    os.environ["GROQ_API_KEY"] = groq_api_key
+else:
+    st.error("Groq API key not found. Please set the environment variable GROQ_API_KEY.")
 
 # Initialize the Groq client
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
@@ -19,28 +24,35 @@ client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 # Load the model name
 model_name = "llama3-8b-8129"  # Ensure this model exists on Hugging Face
 
-# Load the tokenizer
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-
-# Load the model on CPU without quantization
-model = AutoModelForCausalLM.from_pretrained(model_name)  # No quantization and using full precision
-
-# Create a text generation pipeline on CPU
-pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
+# Load the tokenizer and model
+try:
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(model_name)
+    # Create a text generation pipeline
+    pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
+except Exception as e:
+    st.error(f"Failed to load model or tokenizer: {e}")
 
 def summarize_text(text: str) -> str:
     """Generates a summary of the provided text using the LLaMA model."""
-    # Generate summary
-    summary = pipe(text, max_length=150, num_return_sequences=1)[0]['generated_text']
-    return summary
+    try:
+        summary = pipe(text, max_length=150, num_return_sequences=1)[0]['generated_text']
+        return summary
+    except Exception as e:
+        st.error(f"Error in text summarization: {e}")
+        return ""
 
 def get_insight_from_groq(content: str) -> str:
     """Fetches insights from Groq API based on the provided content."""
-    chat_completion = client.chat.completions.create(
-        messages=[{"role": "user", "content": content}],
-        model="llama3-8b-8192"  # Using the specified Groq model
-    )
-    return chat_completion.choices[0].message.content
+    try:
+        chat_completion = client.chat.completions.create(
+            messages=[{"role": "user", "content": content}],
+            model="llama3-8b-8192"  # Using the specified Groq model
+        )
+        return chat_completion.choices[0].message.content
+    except Exception as e:
+        st.error(f"Error in fetching insights from Groq: {e}")
+        return ""
 
 # Streamlit application
 def main():
@@ -52,9 +64,9 @@ def main():
 
     if st.button("Generate Summary and Insights"):
         if original_text:
-            try:
-                # Generate summary
-                summary = summarize_text(original_text)
+            # Generate summary
+            summary = summarize_text(original_text)
+            if summary:
                 st.subheader("Summary:")
                 st.write(summary)
 
@@ -62,9 +74,6 @@ def main():
                 insight = get_insight_from_groq(summary)
                 st.subheader("Insight from Groq:")
                 st.write(insight)
-
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
         else:
             st.warning("Please enter some text before generating a summary.")
 
