@@ -7,3 +7,4 @@ crewai
 crewai-tools
 groq
 chromadb
+pysqlite3-binary
