@@ -34,7 +34,7 @@ class ContentResearchTool(BaseTool):
                         "content": query,
                     }
                 ],
-                model="llama3-8b-8192"  # Model can be changed based on available models
+                model="gemma-7b-it"  # Model can be changed based on available models
             )
 
             # Extract the result
