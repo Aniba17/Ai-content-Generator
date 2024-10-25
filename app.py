@@ -1,93 +1,81 @@
 import streamlit as st
 from crewai import Crew
+from textwrap import dedent
 from agents import ContentCreators
 from tasks import ContentTasks
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class ContentCrew:
-    def __init__(self, topic, requirements, interests, task_type):
+    def __init__(self, topic, content_length, tone):
         self.topic = topic
-        self.requirements = requirements
-        self.interests = interests
-        self.task_type = task_type
+        self.content_length = content_length
+        self.tone = tone
 
     def run(self):
-        # Initialize tasks and agents
-        tasks = ContentTasks()
+        # Initialize your agents and tasks
         agents = ContentCreators()
+        tasks = ContentTasks()
 
-        # Create agents based on the selected task
-        content_research_agent = agents.content_research_agent(tasks)
-        content_generation_agent = agents.content_generation_agent(tasks)
-        editing_optimization_agent = agents.editing_and_optimization_agent(tasks)
+        # Define your content creation agents
+        content_research_agent = agents.content_research_agent()
+        content_generation_agent = agents.content_generation_agent()
 
-        # Prepare a task list and associate it with agents based on the task type
-        task_list = []
-        if self.task_type == "Generate Content":
-            # Use the content research task for content generation
-            task_list = [tasks.content_research_tool(), tasks.text_summarization_tool()]
-        elif self.task_type == "Summarize Text":
-            # Use the text summarization task for summarization
-            task_list = [tasks.text_summarization_tool()]
+        # Check if agents are correctly initialized
+        if content_research_agent is None or content_generation_agent is None:
+            raise ValueError("One or more content creation agents are not initialized.")
 
-        # Create a crew with agents and tasks, ensuring each agent can handle its respective tasks
+        # Define the task for content generation
+        generate_content_task = tasks.generate_content(
+            content_generation_agent,
+            self.topic,
+            self.content_length,
+            self.tone
+        )
+
+        # Check if the generate_content task is properly initialized
+        if generate_content_task is None:
+            raise ValueError("Content generation task could not be created.")
+
+        # Define your crew
         crew = Crew(
-            agents=[content_research_agent, content_generation_agent, editing_optimization_agent],
-            tasks=task_list,
+            agents=[
+                content_research_agent,
+                content_generation_agent
+            ],
+            tasks=[
+                generate_content_task
+            ],
             verbose=True,
         )
 
-        try:
-            # Run the crew's kickoff process and return the result
-            result = crew.kickoff()
-        except Exception as e:
-            result = f"Error during task execution: {str(e)}"
-
+        result = crew.kickoff()
         return result
 
-
+# Streamlit app
 def main():
-    # Streamlit UI setup
-    st.title("AI Content Generator Crew")
-    st.sidebar.header("User Input")
+    st.title("Content Creation Crew")
+    st.markdown("Welcome to the Content Creation Crew! Create engaging and creative content with ease.")
 
-    # Task type selection
-    task_type = st.sidebar.selectbox(
-        "Choose the Task",
-        ("Generate Content", "Summarize Text")
-    )
+    # User inputs
+    topic = st.text_input("What topic do you want to create content about?")
+    content_length = st.selectbox("What is the desired length of the content?", ["Short", "Medium", "Long"])
+    tone = st.selectbox("What tone do you want for the content?", ["Formal", "Casual", "Humorous"])
 
-    # User input fields
-    topic = st.sidebar.text_input("Topic", "")
-    
-    # Only show requirements and interests fields if generating content
-    if task_type == "Generate Content":
-        requirements = st.sidebar.text_input("Requirements (e.g., length, format)", "")
-        interests = st.sidebar.text_input("Interests related to this topic", "")
-    else:
-        requirements, interests = "", ""  # Not necessary for text summarization
-
-    # Submit button action
-    if st.sidebar.button("Submit"):
-        if task_type == "Generate Content":
-            # Check if all required fields are filled for content generation
-            if topic and requirements and interests:
-                content_crew = ContentCrew(topic, requirements, interests, task_type)
+    if st.button("Generate Content"):
+        if topic and content_length and tone:
+            content_crew = ContentCrew(topic, content_length, tone)
+            try:
                 result = content_crew.run()
-                st.subheader("Generated Content")
+                st.markdown("### Here is your Content Creation Result:")
                 st.write(result)
-            else:
-                st.warning("Please fill in all fields for content generation.")
-        elif task_type == "Summarize Text":
-            # Only check if topic is filled for summarization
-            if topic:
-                content_crew = ContentCrew(topic, requirements, interests, task_type)
-                result = content_crew.run()
-                st.subheader("Summarized Content")
-                st.write(result)
-            else:
-                st.warning("Please enter the text to summarize.")
-
+            except ValueError as e:
+                st.error(f"Error: {e}")
+            except Exception as e:
+                st.error(f"An unexpected error occurred: {e}")
+        else:
+            st.warning("Please fill in all fields.")
 
 if __name__ == "__main__":
     main()
