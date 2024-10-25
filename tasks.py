@@ -1,48 +1,89 @@
-# tasks.py
 from crewai import Task
-
+from textwrap import dedent
 
 class ContentTasks:
-    def content_research_tool(self):
-        """Defines a task for gathering high-quality information from reliable sources."""
+    def __tip_section(self):
+        return "Remember, your job is to ensure the content is creative, accurate, and engaging. Deliver top-quality work to help improve the overall user experience!"
+
+    def generate_content(self, agent, topic, length, tone):
         return Task(
-            name="Content Research",
-            description="Gathers high-quality information from reliable sources.",
-            parameters={
-                "topic": {
-                    "type": "string", 
-                    "description": "The topic for which content is to be researched."
-                },
-                "requirements": {
-                    "type": "string", 
-                    "description": "Specific requirements or constraints for the research."
-                },
-                "interest_areas": {
-                    "type": "string", 
-                    "description": "Areas of interest related to the topic."
-                }
-            },
-            expected_output="A summary of the researched content and a list of reliable sources used for the research."
+            description=dedent(
+                f"""
+                **Task**: Generate Creative Content
+                **Description**: Create a {length} article, blog post, or social media content on the topic "{topic}". 
+                    The content should be engaging and tailored to the audience's preferences. Ensure the tone is {tone} 
+                    and the structure is appropriate for the format chosen (e.g., blog post, social media caption, etc.).
+                **Parameters**:
+                - Topic: {topic}
+                - Content Length: {length}
+                - Tone: {tone}
+                **Note**: Ensure content flows well and is tailored to the target audience.
+                """
+            ),
+            agent=agent,
+            expected_output={
+                "content": "string",  # Specify that the expected output is a string
+                "status": "success"  # Optionally, include any other expected output fields
+            }
         )
 
-    def text_summarization_tool(self):
-        """Defines a task for summarizing the provided text."""
+    def optimize_for_seo(self, agent, content, primary_keywords, secondary_keywords):
         return Task(
-            name="Text Summarization",
-            description="Summarizes the provided text.",
-            parameters={
-                "text": {
-                    "type": "string", 
-                    "description": "The text that needs to be summarized."
-                },
-                "length": {
-                    "type": "string", 
-                    "description": "Desired length of the summary (short, medium, long)."
-                },
-                "format": {
-                    "type": "string", 
-                    "description": "Desired format for the summary (bullet points, paragraphs, etc.)."
-                }
-            },
-            expected_output="The summarized text in the specified length and format."
+            description=dedent(
+                f"""
+                **Task**: SEO Optimization
+                **Description**: Optimize the provided content for SEO. Integrate the primary and secondary keywords 
+                    naturally into the content, improve headings, meta tags, and ensure proper keyword density.
+                    Additionally, check for readability and provide suggestions for SEO improvement.
+                **Parameters**:
+                - Content: {content}
+                - Primary Keywords: {primary_keywords}
+                - Secondary Keywords: {secondary_keywords}
+                **Note**: Ensure the content remains readable while being optimized for search engines.
+                """
+            ),
+            agent=agent,
+            expected_output={
+                "optimized_content": "string",  # Specify that the expected output is the optimized content
+                "status": "success"
+            }
+        )
+
+    def fact_check_content(self, agent, content):
+        return Task(
+            description=dedent(
+                f"""
+                **Task**: Fact-Check Generated Content
+                **Description**: Cross-check the accuracy of facts, statistics, and claims made in the provided content. 
+                    Verify information from reputable sources to ensure that the content is trustworthy and factually correct.
+                **Parameters**:
+                - Content: {content}
+                **Note**: Flag any discrepancies or inaccuracies, and suggest credible sources for corrections.
+                """
+            ),
+            agent=agent,
+            expected_output={
+                "fact_check_results": "dict",  # Specify that the expected output is a dictionary of results
+                "status": "success"
+            }
+        )
+
+    def summarize_content(self, agent, content, summary_length):
+        return Task(
+            description=dedent(
+                f"""
+                **Task**: Summarize Content
+                **Description**: Condense the provided content into a summary of approximately {summary_length} words. 
+                    Ensure the summary captures all the key points while making it easy for the reader to grasp the main ideas quickly.
+                **Parameters**:
+                - Content: {content}
+                - Summary Length: {summary_length}
+                **Note**: Focus on the core ideas while maintaining the integrity of the original content.
+                """
+            ),
+            agent=agent,
+            expected_output={
+                "summary": "string",  # Specify that the expected output is a summary string
+                "status": "success"
+            }
         )
